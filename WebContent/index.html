@@ -1,0 +1,63 @@
+<!doctype html>
+<html ng-app="myApp">
+<head>
+<script src="js/jquery-1.9.1.js"></script>
+<script src="lib/angular.min.js"></script>
+<script src="js/form.js"></script>
+<script src="js/dialog.js"></script>
+<script src="js/bootstrap.min.js"></script>
+<script src="js/ng-grid-2.0.11.min.js"></script>
+<link rel="stylesheet" type="text/css" href="css/style.css" />
+<link rel="stylesheet" type="text/css" href="css/ng-grid.css" />
+<link rel="stylesheet" type="text/css" href="css/bootstrap.css" />
+
+</head>
+
+<body ng-controller="MyCtrl">
+	<form ng-submit="createUser()">
+		<legend>Add New User</legend>
+
+		<label>Name: </label> <input type="text" id="name" name="name"
+			ng-model="person.nome" placeholder="User Name"> <label>Password:</label>
+		<input type="text" id="pwd" name="pwd" ng-model="person.idade"
+			placeholder=" idade">
+
+		<button class="btn btn-primary">Add</button>
+
+	</form>
+
+
+
+
+
+	<div>
+		<div class="gridStyle" ng-grid="gridOptions"></div>
+		<div class="selectedItems">{{mySelections}}</div>
+	</div>
+	<div class="span6">
+		<table class="table table-striped table-condensed">
+			<thead>
+				<tr>
+					<th style="min-width: 80px;">First name</th>
+					<th style="min-width: 80px;">Last name</th>
+					<th style="width: 20px;">&nbsp;</th>
+					<th style="width: 20px;">&nbsp;</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr ng-repeat="user in persons">
+					<td>{{ user.nome }}</td>
+					<td>{{ user.idade }}</td>
+					<td><a ng-click="editUser(user.nome)"
+						class="btn btn-small btn-primary">edit</a></td>
+					<td><a ng-click="deleteUser(user.nome)"
+						class="btn btn-small btn-danger">delete</a></td>
+				</tr>
+			</tbody>
+		</table>
+		<a ng-click="createNewUser()" class="btn btn-small">create new
+			user</a>
+	</div>
+</body>
+
+</html>

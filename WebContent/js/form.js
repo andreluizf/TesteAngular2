@@ -1,0 +1,73 @@
+
+
+var app = angular.module('myApp', ['ngGrid']);
+
+app.controller('MyCtrl', function($scope, $http) {
+	$scope.persons = [];
+
+	$scope.createUser = function() {
+		console.log($scope.person), $http({
+					method : 'POST',
+					url : 'resources/persons',
+					headers : {
+						'Content-Type' : 'application/json'
+					},
+
+					data : $scope.person
+				}).success(function(data) {
+					$scope.status = data;
+					$('#addUser').modal('hide');
+					$scope.refreshGrid();
+
+				});
+	};
+
+	$scope.refreshGrid = function(page) {
+		$http({
+					url : 'resources/persons',
+					method : 'GET'
+
+				}).success(function(data) {
+					$scope.persons = data;
+				});
+	};
+
+	// Do something when the grid is sorted.
+	// The grid throws the ngGridEventSorted that gets picked up here and
+	// assigns the sortInfo to the scope.
+	// This will allow to watch the sortInfo in the scope for changed and
+	// refresh the grid.
+	$scope.$on('ngGridEventSorted', function(event, sortInfo) {
+				$scope.sortInfo = sortInfo;
+			});
+
+	// Watch the sortInfo variable. If changes are detected than we need to
+	// refresh the grid.
+	// This also works for the first page access, since we assign the initial
+	// sorting in the initialize section.
+	$scope.$watch('sortInfo', function() {
+				$scope.refreshGrid($scope.persons.currentPage);
+			}, true);
+
+	// Initialize required information: sorting, the first page to show and the
+	// grid options.
+
+	$scope.persons = {
+		currentPage : 1
+	};
+	$scope.mySelections = [];
+	$scope.gridOptions = {
+		data : 'persons',
+		selectedItems : $scope.mySelections,
+		multiSelect : false
+
+	};
+
+		//   
+		// $scope.myData = [{name: "Moroni", age: 50},
+		// {name: "Tiancum", age: 43},
+		// {name: "Jacob", age: 27},
+		// {name: "Nephi", age: 29},
+		// {name: "Enos", age: 34}];
+		// $scope.gridOptions = { data: 'myData' };
+	});
