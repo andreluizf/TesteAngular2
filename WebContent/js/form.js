@@ -3,14 +3,15 @@
 var app = angular.module('myApp', ['ngGrid']);
 
 app.controller('MyCtrl', function($scope, $http) {
-	$scope.persons = [];
-	$scope.person = [];
 
 	$scope.createUser = function() {
-		console.log($scope.person.id)
 		if ($scope.person.id != null) {
+			console.log('alter');
+			console.log($scope.person);
 			$scope.alterUser();
 		} else {
+			console.log('create');
+			console.log($scope.person);
 			$http({
 						method : 'POST',
 						url : 'resources/persons',
@@ -22,13 +23,17 @@ app.controller('MyCtrl', function($scope, $http) {
 					}).success(function(data) {
 						$scope.status = data;
 						$('#addUser').modal('hide');
+						$scope.person = {
+							id : null,
+							nome : "",
+							idade : ""
+						};
 						$scope.refreshGrid();
 
 					});
-
 		}
-
 	};
+
 	$scope.alterUser = function() {
 		console.log($scope.person), $http({
 					method : 'POST',
@@ -41,6 +46,11 @@ app.controller('MyCtrl', function($scope, $http) {
 				}).success(function(data) {
 					$scope.status = data;
 					$('#addUser').modal('hide');
+					$scope.person = {
+						id : null,
+						nome : "",
+						idade : ""
+					};
 					$scope.refreshGrid();
 
 				});
