@@ -1,6 +1,7 @@
 package br.com.testeAngular;
 
 public class Person {
+	private int id;
 	private String nome;
 	private String idade;
 
@@ -8,8 +9,9 @@ public class Person {
 		// TODO Auto-generated constructor stub
 	}
 
-	public Person(String nome, String idade) {
+	public Person(int id,String nome, String idade) {
 		super();
+		this.id=id;
 		this.nome = nome;
 		this.idade = idade;
 	}
@@ -29,5 +31,16 @@ public class Person {
 	public void setIdade(String idade) {
 		this.idade = idade;
 	}
+
+	public int getId() {
+		return id;
+	}
+
+	public void setId(int id) {
+		this.id = id;
+	}
+
+	 
+
 
 }

@@ -4,11 +4,35 @@ var app = angular.module('myApp', ['ngGrid']);
 
 app.controller('MyCtrl', function($scope, $http) {
 	$scope.persons = [];
+	$scope.person = [];
 
 	$scope.createUser = function() {
+		console.log($scope.person.id)
+		if ($scope.person.id != null) {
+			$scope.alterUser();
+		} else {
+			$http({
+						method : 'POST',
+						url : 'resources/persons',
+						headers : {
+							'Content-Type' : 'application/json'
+						},
+
+						data : $scope.person
+					}).success(function(data) {
+						$scope.status = data;
+						$('#addUser').modal('hide');
+						$scope.refreshGrid();
+
+					});
+
+		}
+
+	};
+	$scope.alterUser = function() {
 		console.log($scope.person), $http({
 					method : 'POST',
-					url : 'resources/persons',
+					url : 'resources/persons/alter',
 					headers : {
 						'Content-Type' : 'application/json'
 					},
@@ -17,6 +41,23 @@ app.controller('MyCtrl', function($scope, $http) {
 				}).success(function(data) {
 					$scope.status = data;
 					$('#addUser').modal('hide');
+					$scope.refreshGrid();
+
+				});
+	};
+	$scope.delUser = function() {
+		console.log('del')
+		console.log($scope.person), $http({
+					method : 'POST',
+					url : 'resources/persons/del',
+					headers : {
+						'Content-Type' : 'application/json'
+					},
+
+					data : $scope.person
+				}).success(function(data) {
+					$scope.status = data;
+					$('#delUser').modal('hide');
 					$scope.refreshGrid();
 
 				});
@@ -55,6 +96,17 @@ app.controller('MyCtrl', function($scope, $http) {
 	$scope.persons = {
 		currentPage : 1
 	};
+	$scope.select = function(user, type) {
+		$scope.person = user;
+		if (type == 'edit') {
+
+			$('#addUser').modal('show');
+		} else {
+			$('#delUser').modal('show');
+		}
+
+	};
+
 	$scope.mySelections = [];
 	$scope.gridOptions = {
 		data : 'persons',
