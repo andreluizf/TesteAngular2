@@ -3,6 +3,7 @@ package br.com.testeAngular;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.ejb.EJB;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
@@ -10,9 +11,16 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
+import br.com.sistema.web.repository.UsuarioRepository;
+import br.com.testeAngular.model.Usuario;
+
 //@ApplicationPath("/resources")
+//@Stateless
 @Path("persons")
 public class PersonResource {
+	
+	@EJB(beanName="UsuarioRepository")
+	UsuarioRepository repo;
 
 	static List<Person> lists;
 
@@ -68,10 +76,10 @@ public class PersonResource {
 	@GET
 	// @Path("list")
 	@Produces(MediaType.APPLICATION_JSON)
-	public List<Person> listPersons() {
+	public List<Usuario> listPersons() {
 		System.out.println(":::::::::::::lista");
 
-		return lists;
+		return repo.listCliente();
 	}
 
 }
