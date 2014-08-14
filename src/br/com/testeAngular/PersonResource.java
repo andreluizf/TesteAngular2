@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.ejb.EJB;
+import javax.ejb.Stateless;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
@@ -18,8 +19,8 @@ import br.com.testeAngular.model.Usuario;
 //@Stateless
 @Path("persons")
 public class PersonResource {
-	
-	@EJB(beanName="UsuarioRepository")
+
+	@EJB(beanName = "UsuarioRepository")
 	UsuarioRepository repo;
 
 	static List<Person> lists;
@@ -37,25 +38,22 @@ public class PersonResource {
 	@POST
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-	public void create(Person user) {
-		System.out.println(":::::::::::::create" + user.toString());
-		lists.add(new Person(lists.size() + 1, user.getNome(), user.getIdade()));
-		System.out.println(lists.size());
+	public void create(Usuario user) {
+
+		try {
+			repo.save(user);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
 	}
 
 	@POST
 	@Path("alter")
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-	public void alter(Person user) {
-		for (int i = 0; i < lists.size(); i++) {
-			if (lists.get(i).getId() == user.getId()) {
-				lists.get(i).setIdade(user.getIdade());
-				lists.get(i).setNome(user.getNome());
-				System.out.println(":::::::::::::alter" + user.toString());
-			}
-		}
-		
+	public void alter(Usuario user) {
+		repo.update(user);
 
 	}
 
@@ -63,13 +61,8 @@ public class PersonResource {
 	@Path("del")
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-	public void del(Person user) {
-		for (int i = 0; i < lists.size(); i++) {
-			if (lists.get(i).getId() == user.getId()) {
-				lists.remove(i);
-				System.out.println(":::::::::::::del" + lists.size());
-			}
-		}
+	public void del(Usuario user) {
+		repo.del(user);
 
 	}
 
@@ -79,7 +72,7 @@ public class PersonResource {
 	public List<Usuario> listPersons() {
 		System.out.println(":::::::::::::lista");
 
-		return repo.listCliente();
+		return repo.lists();
 	}
 
 }
